@@ -5,6 +5,27 @@ const users = [
   
   const database = require("../../database");
 
+
+
+  const deleteUser = (req,res) => {
+    const id = parseInt(req.params.id);
+
+    database
+    .query("delete from users where id = ?" , [id])
+    .then(([result]) => {
+      if (result.affectedRows === 0) {
+        res.sendStatus(404);
+      } else {
+        res.sendStatus(204);
+      }
+    })
+    .catch((err) => {
+      console.error(err);
+      res.sendStatus(500);
+    });
+};
+
+
 const getUsers = (req, res) => {
     database
       .query("SELECT * FROM users")
@@ -77,6 +98,7 @@ const getUsers = (req, res) => {
 
   
 module.exports = {
+    deleteUser,
     getUsers,
     getUserById,
     postUser,
